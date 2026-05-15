@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SamCordis - Notícias</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="icon" href="/assets/IcoSamCordis.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+        }
+
+        .main-section {
+            width: 100%;
+            padding-top: 120px;
+            padding-bottom: 80px;
+        }
+
+        /* REMOVE isso completamente */
+        section {
+            margin-bottom: 0;
+        }
+
+        /* Título */
+        .intro {
+            font-size: 2.5em;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        /* Container das notícias */
+        .conteudo-noticia {
+            overflow-wrap: break-word;
+        }
+
+        .conteudo-noticia img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .conteudo-noticia * {
+            max-width: 100%;
+        }
+
+        .conteudo-noticia table {
+            display: block;
+            overflow-x: auto;
+        }
+
+        .conteudo-noticia p,
+        .conteudo-noticia div,
+        .conteudo-noticia span {
+            line-height: 1.6;
+        }
+
+        /* Card */
+        .card {
+            background: rgba(255, 255, 255, 0.92);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, .1);
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Botão editar */
+        .btn-edit {
+            width: 250px;
+            height: 50px;
+            margin: 40px auto;
+            display: block;
+            text-align: center;
+            background: transparent;
+            color: #000;
+            border-radius: 8px;
+            border: 2px solid #000;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.25s ease;
+        }
+
+        .btn-edit:hover {
+            background: #ffffff;
+            transform: scale(1.05);
+        }
+
+        .noticias-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 40px auto;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .imagem-noticia {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+            border-radius: 10px;
+        }
+
+        article {
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="navbar"></div>
+
+    <!--FIRST SECTION-->
+    <main class="main-section">
+        <div class="first-container">
+            <p class="intro" id="typewriter"></p>
+        </div>
+
+        <div id="noticias" class="noticias-container"></div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+
+            <!-- Logo -->
+            <div class="footer-logo">
+                <a href="/index.html">
+                    <img src="/assets/SamCordis ( logo branca ).png" alt="Hospital Samcordis">
+                </a>
+            </div>
+
+            <!-- Informações -->
+            <div class="footer-info">
+                <div class="footer-item">
+                    <h4>Responsável pelo site</h4>
+                    <p>Tecnologia da Informação (TI)<br><b>Ramal 2257</b></p>
+                </div>
+
+                <div class="footer-item">
+                    <h4>Responsável pelo Cardápio</h4>
+                    <p>Setor de Nutrição<br><b>Ramal 2220</b></p>
+                </div>
+
+                <div class="footer-item">
+                    <h4>Responsável pelas Notícias</h4>
+                    <p>Recursos Humanos (RH)<br><b>Ramal 2262</b></p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-right">
+            <p>© 2025 - 2026 | Todos os direitos reservados a equipe da TI</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const text = "Notícias do hospital.";
+            const element = document.getElementById("typewriter");
+            let index = 0;
+
+            function typeEffect() {
+                if (index < text.length) {
+                    element.textContent += text.charAt(index);
+                    index++;
+                    setTimeout(typeEffect, 40); // velocidade da digitação
+                }
+            }
+
+            typeEffect();
+        });
+
+        fetch("noticias.json?v=" + Date.now())
+            .then(r => r.json())
+            .then(lista => {
+
+                const container = document.getElementById("noticias");
+                container.innerHTML = "";
+
+                lista.forEach(n => {
+
+                    container.innerHTML += `
+                <article class="card">
+                    <h2>${n.titulo ?? "Sem título"}</h2>
+
+                    <small style="color:#555;">
+                        Publicado em: ${n.dataPublicacao
+                            ? new Date(n.dataPublicacao).toLocaleString("pt-BR")
+                            : "Data não informada"
+                        }
+                    </small>
+
+                    ${n.imagem ? `<img src="${n.imagem}" class="imagem-noticia">` : ""}
+
+                    <div class="conteudo-noticia">
+                        ${n.mensagem ?? ""}
+                </div>
+
+                    <hr>
+                </article>
+            `;
+                });
+            });             
+    </script>
+
+    <script src="/js/login.js"></script>
+    <script src="/js/buttons.js"></script>
+    <script src="/js/navbar-loader.js"></script>
+</body>
+
+</html>

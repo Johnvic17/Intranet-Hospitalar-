@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/assets/IcoSamCordis.ico" type="image/x-icon">
+    <title>Login</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            display: flex;
+            height: 100vh;
+            align-items: center;
+            justify-content: center;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .login-box {
+            background: white;
+            padding: 30px;
+            width: 300px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px #0003;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .Enter {
+            width: 100%;
+            padding: 10px;
+            margin-top: 15px;
+            background: #2a57a3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 1s;
+        }
+
+        .Enter:hover{
+            background: #628bd3;
+        }
+
+        .Out {
+            width: 100%;
+            padding: 3px;
+            margin-top: 5px;
+            background: #df615d;
+            color: rgb(255, 255, 255);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 1s;
+        }
+
+        .Out:hover {
+            background: #e0817e;
+        }
+
+        .Out a {
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .erro {
+            text-align: center;
+            margin-top: 10px;
+            color: red;
+        }
+
+        .image-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .intro-image {
+            max-width: 40%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .title {
+            font-size: 15pt;            
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .warning{
+            font-size: 7.5pt;
+            color: #2a57a3;
+            text-align: center;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="image-container">
+    <a href="/index.html"><img src="/assets/samcordis.png" alt="Imagem de Instrução" class="intro-image"></a>    
+</div>
+
+<div class="login-box">
+    <h2 class="title">Login</h2>
+    <p class="warning">Entre com o usuário do seu setor!</p>
+    <input id="user" type="text" placeholder="Usuário">
+    <input id="pass" type="password" placeholder="Senha">
+    
+    <button onclick="login()" keydown="login()" class="Enter" id="Enter">Entrar</button>
+    <button id="Out" class="Out">Voltar</button>
+    <div id="erro" class="erro"></div>
+</div>
+
+<script>
+function login() {
+    const usuario = document.getElementById("user").value;
+    const senha = document.getElementById("pass").value;
+
+    // Usuários e níveis
+    const usuarios = {
+        "nutri": { senha: "456", nivel: "nutri" },
+        "ti": { senha: "admin", nivel: "ti" },
+        "rh": { senha: "123", nivel: "rh"},
+        "telefonia": { senha: "789", nivel: "telefonia"}
+    };
+
+    if (usuarios[usuario] && usuarios[usuario].senha === senha) {
+        // Salva login
+        localStorage.setItem("logado", "sim");
+        localStorage.setItem("nivel", usuarios[usuario].nivel);
+
+        if (usuarios[usuario].nivel === "ti"){
+            window.location.href = "/indexTI.html";
+        } else if(usuarios[usuario].nivel === "nutri"){
+            window.location.href = "/indexNutri.html"
+        } else if(usuarios[usuario].nivel === "rh"){
+            window.location.href = "/indexRH.html";
+        } else if (usuarios[usuario].nivel === "telefonia"){
+            window.location.href = "indexTF.html";
+        }
+        
+    } else {
+        document.getElementById("erro").innerText = "Usuário ou senha incorretos!";
+    }
+}
+
+document.addEventListener("keydown", function(e){
+    if(e.key === "Enter"){
+        login();
+    }
+})
+
+const btnOutMenu = document.getElementById("Out")
+      btnOutMenu.addEventListener("click", () => {
+          window.history.back()
+      });
+</script>
+</body>
+</html>
